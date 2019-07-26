@@ -17,6 +17,11 @@
           "type": "formula",
           "as": "year_date",
           "expr": "datetime(year(datum[\"date\"]), 0, 1, 0, 0, 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "year_date_end",
+          "expr": "datetime(year(datum[\"date\"])+1, 0, 1, 0, 0, 0, 0)"
         }
       ]
     },
@@ -26,7 +31,7 @@
       "transform": [
         {
           "type": "aggregate",
-          "groupby": ["year_date"],
+          "groupby": ["year_date", "year_date_end"],
           "ops": ["mean"],
           "fields": ["price"],
           "as": ["mean_price"]
@@ -55,7 +60,9 @@
           "opacity": {"value": 0.3},
           "fill": {"value": "transparent"},
           "stroke": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "year_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"year_date\"] + 0.5 * datum[\"year_date_end\"])"
+          },
           "y": {"scale": "y", "field": "price"}
         }
       }
@@ -69,7 +76,9 @@
       "encode": {
         "update": {
           "stroke": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "year_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"year_date\"] + 0.5 * datum[\"year_date_end\"])"
+          },
           "y": {"scale": "y", "field": "mean_price"},
           "defined": {
             "signal": "datum[\"year_date\"] !== null && !isNaN(datum[\"year_date\"]) && datum[\"mean_price\"] !== null && !isNaN(datum[\"mean_price\"])"
@@ -85,7 +94,9 @@
       "domain": {
         "fields": [
           {"data": "data_1", "field": "year_date"},
-          {"data": "data_0", "field": "year_date"}
+          {"data": "data_1", "field": "year_date_end"},
+          {"data": "data_0", "field": "year_date"},
+          {"data": "data_0", "field": "year_date_end"}
         ]
       },
       "range": [0, {"signal": "width"}]

@@ -26,6 +26,11 @@
           "type": "formula",
           "as": "utcyearmonthdatehoursminutes_date",
           "expr": "datetime(utcyear(datum[\"date\"]), utcmonth(datum[\"date\"]), utcdate(datum[\"date\"]), utchours(datum[\"date\"]), utcminutes(datum[\"date\"]), 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "utcyearmonthdatehoursminutes_date_end",
+          "expr": "datetime(utcyear(datum[\"date\"]), utcmonth(datum[\"date\"]), utcdate(datum[\"date\"]), utchours(datum[\"date\"]), utcminutes(datum[\"date\"])+1, 0, 0)"
         }
       ]
     }
@@ -40,7 +45,9 @@
       "encode": {
         "update": {
           "stroke": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "utcyearmonthdatehoursminutes_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"utcyearmonthdatehoursminutes_date\"] + 0.5 * datum[\"utcyearmonthdatehoursminutes_date_end\"])"
+          },
           "y": {"scale": "y", "field": "price"},
           "defined": {
             "signal": "datum[\"utcyearmonthdatehoursminutes_date\"] !== null && !isNaN(datum[\"utcyearmonthdatehoursminutes_date\"]) && datum[\"price\"] !== null && !isNaN(datum[\"price\"])"
@@ -55,7 +62,10 @@
       "type": "time",
       "domain": {
         "data": "data_0",
-        "field": "utcyearmonthdatehoursminutes_date"
+        "fields": [
+          "utcyearmonthdatehoursminutes_date",
+          "utcyearmonthdatehoursminutes_date_end"
+        ]
       },
       "range": [0, {"signal": "width"}]
     },

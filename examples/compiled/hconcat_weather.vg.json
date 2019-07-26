@@ -21,8 +21,13 @@
           "expr": "datetime(0, month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "month_date_end",
+          "expr": "datetime(0, month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["month_date"],
+          "groupby": ["month_date", "month_date_end"],
           "ops": ["mean"],
           "fields": ["precipitation"],
           "as": ["mean_precipitation"]

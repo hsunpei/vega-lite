@@ -18,7 +18,7 @@
         },
         {
           "type": "aggregate",
-          "groupby": ["yearmonth_date"],
+          "groupby": ["yearmonth_date", "yearmonth_date_end"],
           "ops": ["mean"],
           "fields": ["temp"],
           "as": ["mean_temp"]
@@ -59,7 +59,10 @@
     {
       "name": "color",
       "type": "time",
-      "domain": {"data": "source_0", "field": "yearmonth_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["yearmonth_date", "yearmonth_date_end"]
+      },
       "range": "ramp",
       "interpolate": "hcl"
     }

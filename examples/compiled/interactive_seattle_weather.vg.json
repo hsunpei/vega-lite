@@ -303,7 +303,9 @@
                 },
                 {"value": "lightgray"}
               ],
-              "x": {"scale": "concat_0_x", "field": "monthdate_date"},
+              "x": {
+                "signal": "scale(\"concat_0_x\", 0.5 * datum[\"monthdate_date\"] + 0.5 * datum[\"monthdate_date_end\"])"
+              },
               "y": {"scale": "concat_0_y", "field": "temp_max"},
               "size": {"scale": "size", "field": "precipitation"}
             }
@@ -528,7 +530,10 @@
     {
       "name": "concat_0_x",
       "type": "time",
-      "domain": {"data": "data_1", "field": "monthdate_date"},
+      "domain": {
+        "data": "data_1",
+        "fields": ["monthdate_date", "monthdate_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {

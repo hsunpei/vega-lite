@@ -41,7 +41,7 @@
       "transform": [
         {
           "type": "aggregate",
-          "groupby": ["month_date"],
+          "groupby": ["month_date", "month_date_end"],
           "ops": ["mean"],
           "fields": ["precipitation"],
           "as": ["mean_precipitation"]

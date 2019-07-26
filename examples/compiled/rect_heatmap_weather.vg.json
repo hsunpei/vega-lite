@@ -20,12 +20,27 @@
         },
         {
           "type": "formula",
+          "as": "date_date_end",
+          "expr": "datetime(0, 0, date(datum[\"date\"])+1, 0, 0, 0, 0)"
+        },
+        {
+          "type": "formula",
           "as": "month_date",
           "expr": "datetime(0, month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "month_date_end",
+          "expr": "datetime(0, month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["date_date", "month_date"],
+          "groupby": [
+            "date_date",
+            "date_date_end",
+            "month_date",
+            "month_date_end"
+          ],
           "ops": ["max"],
           "fields": ["temp"],
           "as": ["max_temp"]

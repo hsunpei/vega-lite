@@ -17,8 +17,18 @@
         },
         {
           "type": "formula",
+          "as": "day_time_end",
+          "expr": "datetime(2006, 0, day(datum[\"time\"])+1+1, 0, 0, 0, 0)"
+        },
+        {
+          "type": "formula",
           "as": "hours_time",
           "expr": "datetime(0, 0, 1, hours(datum[\"time\"]), 0, 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "hours_time_end",
+          "expr": "datetime(0, 0, 1, hours(datum[\"time\"])+1, 0, 0, 0)"
         },
         {
           "type": "formula",
@@ -33,7 +43,12 @@
       "transform": [
         {
           "type": "aggregate",
-          "groupby": ["day_time", "hours_time"],
+          "groupby": [
+            "day_time",
+            "day_time_end",
+            "hours_time",
+            "hours_time_end"
+          ],
           "ops": ["sum"],
           "fields": ["count"],
           "as": ["sum_count"]

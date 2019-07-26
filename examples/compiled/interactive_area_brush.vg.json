@@ -22,8 +22,13 @@
           "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "yearmonth_date_end",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["yearmonth_date"],
+          "groupby": ["yearmonth_date", "yearmonth_date_end"],
           "ops": ["sum"],
           "fields": ["count"],
           "as": ["sum_count"]
@@ -44,8 +49,13 @@
           "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "yearmonth_date_end",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["yearmonth_date"],
+          "groupby": ["yearmonth_date", "yearmonth_date_end"],
           "ops": ["sum"],
           "fields": ["count"],
           "as": ["sum_count"]
@@ -267,7 +277,9 @@
         "update": {
           "orient": {"value": "vertical"},
           "fill": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "yearmonth_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"yearmonth_date\"] + 0.5 * datum[\"yearmonth_date_end\"])"
+          },
           "y": {"scale": "y", "field": "sum_count"},
           "y2": {"scale": "y", "value": 0},
           "defined": {
@@ -286,7 +298,9 @@
         "update": {
           "orient": {"value": "vertical"},
           "fill": {"value": "goldenrod"},
-          "x": {"scale": "x", "field": "yearmonth_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"yearmonth_date\"] + 0.5 * datum[\"yearmonth_date_end\"])"
+          },
           "y": {"scale": "y", "field": "sum_count"},
           "y2": {"scale": "y", "value": 0},
           "defined": {
@@ -345,7 +359,9 @@
       "domain": {
         "fields": [
           {"data": "data_0", "field": "yearmonth_date"},
-          {"data": "data_1", "field": "yearmonth_date"}
+          {"data": "data_0", "field": "yearmonth_date_end"},
+          {"data": "data_1", "field": "yearmonth_date"},
+          {"data": "data_1", "field": "yearmonth_date_end"}
         ]
       },
       "range": [0, {"signal": "width"}]

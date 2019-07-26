@@ -18,8 +18,18 @@
           "expr": "datetime(year(datum[\"Year\"]), 0, 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "year_Year_end",
+          "expr": "datetime(year(datum[\"Year\"])+1, 0, 1, 0, 0, 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "year_Year",
+          "expr": "datetime(year(datum[\"Year\"]), 0, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["year_Year"],
+          "groupby": ["year_Year", "year_Year_end"],
           "ops": ["mean"],
           "fields": ["Horsepower"],
           "as": ["mean_Horsepower"]
@@ -40,7 +50,9 @@
       "encode": {
         "update": {
           "fill": {"value": "black"},
-          "x": {"scale": "x", "field": "year_Year"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"year_Year\"] + 0.5 * datum[\"year_Year_end\"])"
+          },
           "y": {"scale": "y", "field": "mean_Horsepower"},
           "text": {"signal": "timeFormat(datum[\"year_Year\"], '%Y')"},
           "align": {"value": "center"},
@@ -53,7 +65,7 @@
     {
       "name": "x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "year_Year"},
+      "domain": {"data": "source_0", "fields": ["year_Year", "year_Year_end"]},
       "range": [0, {"signal": "width"}]
     },
     {

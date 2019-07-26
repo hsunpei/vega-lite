@@ -18,8 +18,13 @@
           "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"]), 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "yearmonthdate_date_end",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"])+1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["yearmonthdate_date", "symbol"],
+          "groupby": ["yearmonthdate_date", "yearmonthdate_date_end", "symbol"],
           "ops": ["sum"],
           "fields": ["price"],
           "as": ["sum_price"]

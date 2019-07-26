@@ -19,8 +19,13 @@
           "expr": "datetime(0, month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "month_date_end",
+          "expr": "datetime(0, month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["month_date"],
+          "groupby": ["month_date", "month_date_end"],
           "ops": ["average", "average", "average"],
           "fields": ["temp_max", "temp_min", "precipitation"],
           "as": [
@@ -44,7 +49,9 @@
           "opacity": {"value": 0.3},
           "orient": {"value": "vertical"},
           "fill": {"value": "#85C5A6"},
-          "x": {"scale": "x", "field": "month_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"month_date\"] + 0.5 * datum[\"month_date_end\"])"
+          },
           "y": {"scale": "layer_0_y", "field": "average_temp_max"},
           "y2": {"scale": "layer_0_y", "field": "average_temp_min"},
           "defined": {
@@ -63,7 +70,9 @@
         "update": {
           "stroke": {"value": "#85A9C5"},
           "interpolate": {"value": "monotone"},
-          "x": {"scale": "x", "field": "month_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"month_date\"] + 0.5 * datum[\"month_date_end\"])"
+          },
           "y": {"scale": "layer_1_y", "field": "average_precipitation"},
           "defined": {
             "signal": "datum[\"month_date\"] !== null && !isNaN(datum[\"month_date\"]) && datum[\"average_precipitation\"] !== null && !isNaN(datum[\"average_precipitation\"])"
@@ -76,7 +85,10 @@
     {
       "name": "x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "month_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["month_date", "month_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {

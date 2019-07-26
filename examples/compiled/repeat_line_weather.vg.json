@@ -16,8 +16,13 @@
           "expr": "datetime(0, month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "month_date_end",
+          "expr": "datetime(0, month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["month_date", "location"],
+          "groupby": ["month_date", "month_date_end", "location"],
           "ops": ["mean", "mean", "mean"],
           "fields": ["precipitation", "wind", "temp_max"],
           "as": ["mean_precipitation", "mean_wind", "mean_temp_max"]
@@ -64,8 +69,7 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "location"},
                   "x": {
-                    "scale": "child__repeat_repeat_temp_max_x",
-                    "field": "month_date"
+                    "signal": "scale(\"child__repeat_repeat_temp_max_x\", 0.5 * datum[\"month_date\"] + 0.5 * datum[\"month_date_end\"])"
                   },
                   "y": {
                     "scale": "child__repeat_repeat_temp_max_y",
@@ -168,8 +172,7 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "location"},
                   "x": {
-                    "scale": "child__repeat_repeat_precipitation_x",
-                    "field": "month_date"
+                    "signal": "scale(\"child__repeat_repeat_precipitation_x\", 0.5 * datum[\"month_date\"] + 0.5 * datum[\"month_date_end\"])"
                   },
                   "y": {
                     "scale": "child__repeat_repeat_precipitation_y",
@@ -270,8 +273,7 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "location"},
                   "x": {
-                    "scale": "child__repeat_repeat_wind_x",
-                    "field": "month_date"
+                    "signal": "scale(\"child__repeat_repeat_wind_x\", 0.5 * datum[\"month_date\"] + 0.5 * datum[\"month_date_end\"])"
                   },
                   "y": {
                     "scale": "child__repeat_repeat_wind_y",
@@ -348,7 +350,10 @@
     {
       "name": "child__repeat_repeat_temp_max_x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "month_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["month_date", "month_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {
@@ -362,7 +367,10 @@
     {
       "name": "child__repeat_repeat_precipitation_x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "month_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["month_date", "month_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {
@@ -376,7 +384,10 @@
     {
       "name": "child__repeat_repeat_wind_x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "month_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["month_date", "month_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {

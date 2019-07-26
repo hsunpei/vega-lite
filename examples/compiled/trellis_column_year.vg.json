@@ -20,8 +20,18 @@
           "expr": "datetime(0, (quarter(datum[\"date\"])-1)*3, 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "quarter_date_end",
+          "expr": "datetime(0, (quarter(datum[\"date\"])-1)+1*3, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["quarter_date", "symbol", "year_date"],
+          "groupby": [
+            "quarter_date",
+            "quarter_date_end",
+            "symbol",
+            "year_date"
+          ],
           "ops": ["mean"],
           "fields": ["price"],
           "as": ["mean_price"]

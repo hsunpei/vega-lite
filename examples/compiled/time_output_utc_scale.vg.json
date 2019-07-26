@@ -26,6 +26,11 @@
           "type": "formula",
           "as": "yearmonthdatehoursminutes_date",
           "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"]), hours(datum[\"date\"]), minutes(datum[\"date\"]), 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "yearmonthdatehoursminutes_date_end",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"]), hours(datum[\"date\"]), minutes(datum[\"date\"])+1, 0, 0)"
         }
       ]
     }
@@ -40,7 +45,9 @@
       "encode": {
         "update": {
           "stroke": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "yearmonthdatehoursminutes_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"yearmonthdatehoursminutes_date\"] + 0.5 * datum[\"yearmonthdatehoursminutes_date_end\"])"
+          },
           "y": {"scale": "y", "field": "price"},
           "defined": {
             "signal": "datum[\"yearmonthdatehoursminutes_date\"] !== null && !isNaN(datum[\"yearmonthdatehoursminutes_date\"]) && datum[\"price\"] !== null && !isNaN(datum[\"price\"])"
@@ -53,7 +60,13 @@
     {
       "name": "x",
       "type": "utc",
-      "domain": {"data": "data_0", "field": "yearmonthdatehoursminutes_date"},
+      "domain": {
+        "data": "data_0",
+        "fields": [
+          "yearmonthdatehoursminutes_date",
+          "yearmonthdatehoursminutes_date_end"
+        ]
+      },
       "range": [0, {"signal": "width"}]
     },
     {

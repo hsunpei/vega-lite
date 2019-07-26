@@ -17,8 +17,13 @@
           "expr": "datetime(0, month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "month_date_end",
+          "expr": "datetime(0, month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["month_date"],
+          "groupby": ["month_date", "month_date_end"],
           "ops": ["mean"],
           "fields": ["temp"],
           "as": ["mean_temp"]
@@ -37,7 +42,9 @@
         "update": {
           "interpolate": {"value": "monotone"},
           "stroke": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "month_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"month_date\"] + 0.5 * datum[\"month_date_end\"])"
+          },
           "y": {"scale": "y", "field": "mean_temp"},
           "defined": {
             "signal": "datum[\"month_date\"] !== null && !isNaN(datum[\"month_date\"]) && datum[\"mean_temp\"] !== null && !isNaN(datum[\"mean_temp\"])"
@@ -50,7 +57,10 @@
     {
       "name": "x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "month_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["month_date", "month_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {

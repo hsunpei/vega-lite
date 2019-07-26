@@ -17,8 +17,13 @@
           "expr": "datetime(year(datum[\"date\"]), 0, 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "year_date_end",
+          "expr": "datetime(year(datum[\"date\"])+1, 0, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["year_date"],
+          "groupby": ["year_date", "year_date_end"],
           "ops": ["mean"],
           "fields": ["temp_max"],
           "as": ["mean_temp_max"]
@@ -36,7 +41,9 @@
       "encode": {
         "update": {
           "stroke": {"value": "#4c78a8"},
-          "x": {"scale": "x", "field": "year_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"year_date\"] + 0.5 * datum[\"year_date_end\"])"
+          },
           "y": {"scale": "y", "field": "mean_temp_max"},
           "defined": {
             "signal": "datum[\"year_date\"] !== null && !isNaN(datum[\"year_date\"]) && datum[\"mean_temp_max\"] !== null && !isNaN(datum[\"mean_temp_max\"])"
@@ -49,7 +56,7 @@
     {
       "name": "x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "year_date"},
+      "domain": {"data": "source_0", "fields": ["year_date", "year_date_end"]},
       "range": [0, {"signal": "width"}]
     },
     {

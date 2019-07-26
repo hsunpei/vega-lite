@@ -18,8 +18,13 @@
           "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), 1, 0, 0, 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "yearmonth_date_end",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"])+1, 1, 0, 0, 0, 0)"
+        },
+        {
           "type": "aggregate",
-          "groupby": ["yearmonth_date", "series"],
+          "groupby": ["yearmonth_date", "yearmonth_date_end", "series"],
           "ops": ["sum"],
           "fields": ["count"],
           "as": ["sum_count"]
@@ -87,7 +92,10 @@
     {
       "name": "x",
       "type": "time",
-      "domain": {"data": "source_0", "field": "yearmonth_date"},
+      "domain": {
+        "data": "source_0",
+        "fields": ["yearmonth_date", "yearmonth_date_end"]
+      },
       "range": [0, {"signal": "width"}]
     },
     {

@@ -22,6 +22,11 @@
           "type": "formula",
           "as": "hours_date",
           "expr": "datetime(0, 0, 1, hours(datum[\"date\"]), 0, 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "hours_date_end",
+          "expr": "datetime(0, 0, 1, hours(datum[\"date\"])+1, 0, 0, 0)"
         }
       ]
     }

@@ -17,6 +17,16 @@
           "type": "formula",
           "as": "yearmonthdate_date",
           "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"]), 0, 0, 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "yearmonthdate_date_end",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"])+1, 0, 0, 0, 0)"
+        },
+        {
+          "type": "formula",
+          "as": "yearmonthdate_date",
+          "expr": "datetime(year(datum[\"date\"]), month(datum[\"date\"]), date(datum[\"date\"]), 0, 0, 0, 0)"
         }
       ]
     },
@@ -73,7 +83,9 @@
           "tooltip": {
             "signal": "{\"date (year-month-date)\": timeFormat(datum[\"yearmonthdate_date\"], '%b %d, %Y'), \"temp_max\": format(datum[\"temp_max\"], \"\"), \"temp_min\": format(datum[\"temp_min\"], \"\")}"
           },
-          "x": {"scale": "x", "field": "yearmonthdate_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"yearmonthdate_date\"] + 0.5 * datum[\"yearmonthdate_date_end\"])"
+          },
           "y": {"scale": "y", "field": "temp_max"},
           "defined": {
             "signal": "datum[\"yearmonthdate_date\"] !== null && !isNaN(datum[\"yearmonthdate_date\"]) && datum[\"temp_max\"] !== null && !isNaN(datum[\"temp_max\"])"
@@ -93,7 +105,9 @@
           "tooltip": {
             "signal": "{\"date (year-month-date)\": timeFormat(datum[\"yearmonthdate_date\"], '%b %d, %Y'), \"temp_max\": format(datum[\"temp_max\"], \"\"), \"temp_min\": format(datum[\"temp_min\"], \"\")}"
           },
-          "x": {"scale": "x", "field": "yearmonthdate_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"yearmonthdate_date\"] + 0.5 * datum[\"yearmonthdate_date_end\"])"
+          },
           "y": {"scale": "y", "field": "temp_min"},
           "defined": {
             "signal": "datum[\"yearmonthdate_date\"] !== null && !isNaN(datum[\"yearmonthdate_date\"]) && datum[\"temp_min\"] !== null && !isNaN(datum[\"temp_min\"])"
@@ -118,7 +132,9 @@
           "tooltip": {
             "signal": "{\"date (year-month-date)\": timeFormat(datum[\"yearmonthdate_date\"], '%b %d, %Y'), \"temp_max\": format(datum[\"temp_max\"], \"\"), \"temp_min\": format(datum[\"temp_min\"], \"\")}"
           },
-          "x": {"scale": "x", "field": "yearmonthdate_date"},
+          "x": {
+            "signal": "scale(\"x\", 0.5 * datum[\"yearmonthdate_date\"] + 0.5 * datum[\"yearmonthdate_date_end\"])"
+          },
           "y": {"field": {"group": "height"}},
           "y2": {"value": 0}
         }
@@ -132,7 +148,9 @@
       "domain": {
         "fields": [
           {"data": "source_0", "field": "yearmonthdate_date"},
-          {"data": "data_0", "field": "yearmonthdate_date"}
+          {"data": "source_0", "field": "yearmonthdate_date_end"},
+          {"data": "data_0", "field": "yearmonthdate_date"},
+          {"data": "data_0", "field": "yearmonthdate_date_end"}
         ]
       },
       "range": [0, {"signal": "width"}]

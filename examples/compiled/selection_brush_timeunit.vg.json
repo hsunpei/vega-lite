@@ -41,6 +41,11 @@
           "expr": "datetime(0, 0, 1, 0, minutes(datum[\"date\"]), 0, 0)"
         },
         {
+          "type": "formula",
+          "as": "minutes_date_end",
+          "expr": "datetime(0, 0, 1, 0, minutes(datum[\"date\"])+1, 0, 0)"
+        },
+        {
           "type": "filter",
           "expr": "datum[\"minutes_date\"] !== null && !isNaN(datum[\"minutes_date\"]) && datum[\"price\"] !== null && !isNaN(datum[\"price\"])"
         }
@@ -300,7 +305,9 @@
                 },
                 {"value": "steelblue"}
               ],
-              "x": {"scale": "concat_0_x", "field": "seconds_date"},
+              "x": {
+                "signal": "scale(\"concat_0_x\", 0.5 * datum[\"seconds_date\"] + 0.5 * datum[\"seconds_date_end\"])"
+              },
               "y": {"scale": "concat_0_y", "field": "price"}
             }
           }
@@ -422,7 +429,9 @@
               "opacity": {"value": 0.7},
               "fill": {"value": "transparent"},
               "stroke": {"value": "goldenrod"},
-              "x": {"scale": "concat_1_x", "field": "minutes_date"},
+              "x": {
+                "signal": "scale(\"concat_1_x\", 0.5 * datum[\"minutes_date\"] + 0.5 * datum[\"minutes_date_end\"])"
+              },
               "y": {"scale": "concat_1_y", "field": "price"}
             }
           }
@@ -486,7 +495,10 @@
     {
       "name": "concat_0_x",
       "type": "time",
-      "domain": {"data": "data_2", "field": "seconds_date"},
+      "domain": {
+        "data": "data_2",
+        "fields": ["seconds_date", "seconds_date_end"]
+      },
       "range": [0, {"signal": "concat_0_width"}]
     },
     {
@@ -500,7 +512,10 @@
     {
       "name": "concat_1_x",
       "type": "time",
-      "domain": {"data": "data_1", "field": "minutes_date"},
+      "domain": {
+        "data": "data_1",
+        "fields": ["minutes_date", "minutes_date_end"]
+      },
       "range": [0, {"signal": "concat_1_width"}]
     },
     {
